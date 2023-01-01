@@ -1,3 +1,5 @@
+# thanks diamuxin@forum.mikrotik.com/viewtopic.php?t=182441 for the original idea and code.
+
 /system scheduler add interval=4h name=FireHol-Level1 on-event="/ip firewall address-list\r\
     \n:local update do={\r\
     \n:do {\r\
