@@ -1,0 +1,127 @@
+/system scheduler add interval=4h name=FireHol-Level1 on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\r\
+    \n\$update url=https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level1.netset description=\"FireHOL Level1\" delimiter=(\"\\n\")\r\
+    \n\r\
+    \n\$update url=https://raw.githubusercontent.com/ktsaou/blocklist-ipsets/master/firehol_level2.netset description=\"FireHOL Level2\" delimiter=(\"\\n\")" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=apr/13/2022 start-time=01:30:46
+/system scheduler add interval=4h name=DShield on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\$update url=https://www.dshield.org/block.txt description=DShield delimiter=(\"\\t\") cidr=/24" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=apr/13/2022 start-time=01:35:59
+/system scheduler add interval=4h name="Spamhaus DROP" on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\$update url=https://www.spamhaus.org/drop/drop.txt description=\"Spamhaus DROP\" delimiter=(\"\\_\")\r\
+    \n" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=apr/13/2022 start-time=01:33:04
+/system scheduler add interval=4h name="Spamhaus EDROP" on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\r\
+    \n\$update url=https://www.spamhaus.org/drop/edrop.txt description=\"Spamhaus EDROP\" delimiter=(\"\\_\")\r\
+    \n" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=apr/23/2022 start-time=01:40:10
+/system scheduler add interval=4h name="Abuse.ch SSLBL" on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\r\
+    \n\r\
+    \n\$update url=https://sslbl.abuse.ch/blacklist/sslipblacklist.txt description=\"Abuse.ch SSLBL\" delimiter=(\"\\r\")" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=apr/23/2022 start-time=01:46:21
+/system scheduler add interval=4h name="Abuse.ch FEODO" on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\r\
+    \n\r\
+    \n\$update url=https://feodotracker.abuse.ch/downloads/ipblocklist_recommended.txt description=\"Abuse.ch FEODO\" delimiter=(\"\\r\")" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=apr/23/2022 start-time=01:46:21
+/system scheduler add interval=4h name=FireHol-Level2 on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\r\
+    \n\$update url=https://raw.githubusercontent.com/ktsaou/blocklist-ipsets/master/firehol_level2.netset description=\"FireHOL Level2\" delimiter=(\"\\n\")" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=jan/01/2023 start-time=23:44:40
+/system scheduler add interval=4h name=Malc0de on-event="/ip firewall address-list\r\
+    \n:local update do={\r\
+    \n:do {\r\
+    \n:local data ([:tool fetch url=\$url output=user as-value]->\"data\")\r\
+    \nremove [find list=blacklist comment=\$description]\r\
+    \n:while ([:len \$data]!=0) do={\r\
+    \n:if ([:pick \$data 0 [:find \$data \"\\n\"]]~\"^[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\") do={\r\
+    \n:do {add list=blacklist address=([:pick \$data 0 [:find \$data \$delimiter]].\$cidr) comment=\$description timeout=1d} on-error={}\r\
+    \n}\r\
+    \n:set data [:pick \$data ([:find \$data \"\\n\"]+1) [:len \$data]]\r\
+    \n}\r\
+    \n} on-error={:log warning \"Address list <\$description> update failed\"}\r\
+    \n}\r\
+    \n\r\
+    \n\$update url=https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/malc0de.ipset description=\"malc0de\" delimiter=(\"\\n\")" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon start-date=jan/01/2023 start-time=23:46:52
+    
+    
+ /ip firewall filter add action=drop chain=input comment="Drop new connections from blacklisted IP's to this router" connection-state=new in-interface=WAN-interface src-address-list=blacklist
