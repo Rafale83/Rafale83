@@ -1,8 +1,10 @@
 - 👋 Hi, I’m @Rafale83
 - 👀 I'm a Linux addict since 1992.
 - 👀 I’m a MD interested in any sysadmin and HA systems
+- 👀 I'm tuning AIs to help medical healthcare regulation
 - 🌱 I’m currently learning Perl for the 9th time.
 - 💞️ I’m looking to collaborate on any linux or free software project.
+  
 
 
 <!---
